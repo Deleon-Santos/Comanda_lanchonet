@@ -1,5 +1,5 @@
 # Controle de Comandas em Lanchonete
-![Comanda](Comanda_img.png)
+![Comanda](comanda_img.png)
 
 ## Descrição
 Este software gerencia o controle de comandas em uma lanchonete. Ele permite aos usuários fazer pedidos, consultar comandas, ver o cardápio e calcular o total de vendas do dia. As funcionalidades são implementadas em Python, utilizando listas e dicionários para armazenar os dados dos produtos e das comandas.
@@ -52,6 +52,6 @@ Este software fornece uma solução completa para o gerenciamento de comandas em
 
 ## Desenvolvedor
 Deleon Santos
-- Este sitema foi desenvolvido em carater academico e sua concepção inspirou possibilitou a criação do ![App Vendas]()
+- Este sitema foi desenvolvido em carater academico e sua concepção inspirou possibilitou a criação do ![App Vendas](https://github.com/Deleon-Santos/APP-vendas-V2.1.1)
 
 
