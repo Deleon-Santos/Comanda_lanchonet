@@ -6,27 +6,27 @@ Este software gerencia o controle de comandas em uma lanchonete. Ele permite aos
 
 ## Funcionalidades
 
-### `cardapio()`
+### `Cardapio`
 Exibe o cardápio com os produtos disponíveis e seus respectivos preços.
 
-### `entrada_pedido(com)`
+### `Entrada de pedidos`
 Gerencia a entrada de pedidos de uma comanda específica.
 - Permite adicionar itens ao pedido.
 - Possibilita a remoção de itens.
 - Exibe o subtotal do pedido.
 - Finaliza e registra o pedido para pagamento.
 
-### `coleta(lanche1, soma2, com, num)`
+### `Coletar`
 Coleta a quantidade de um item específico e atualiza o valor total do pedido.
 
-### `remover(soma2)`
+### `Remover`
 Remove um item específico de um pedido e atualiza o valor total.
 
-### `consulta_pedido()`
+### `Consulta pedido`
 Permite a consulta das comandas registradas.
 - Exibe todas as comandas ou uma específica.
 
-### `total()`
+### `Totais`
 Calcula e exibe o total de vendas do dia, tanto em quantidade de itens quanto em valor monetário.
 
 ## Estrutura do Código
