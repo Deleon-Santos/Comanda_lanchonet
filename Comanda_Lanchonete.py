@@ -1,6 +1,8 @@
 
 #                CONTROLE DE COMANDAS EM LANCHONETE
+import mysql.connector
 import json
+
 lista_produto=[]
 lista1=[]
 com=0
@@ -14,11 +16,56 @@ dic=[   {"cod":"1","lanche":"xburguer","preco":10.90},
         {"cod":"5","lanche":"refriger","preco":5.90}]
 
 #                         Inicio da funções
+
+def conectar_db():
+  """
+  Estabelece conexão com o banco de dados MySQL.
+  """
+  try:
+    conexao = mysql.connector.connect(
+      host="localhost",
+      user="usuario",
+      password="senha",
+      database="lanchonetenervosa"
+    )
+    print("Conectado ao MySQL com sucesso!")
+    return conexao
+  except Exception as e:
+    print(f"Erro ao conectar ao MySQL: {e}")
+    return None
+  
+def salvar_pedido(conexao, pedido):
+  """
+  Salva um pedido no banco de dados.
+  """
+  conexao=conexao
+  cursor = conexao.cursor()
+  try:
+    sql = """
+      INSERT INTO pedidos (numero_pedido, item, lanche, quantidade, preco)
+      VALUES (%s, %s, %s, %s, %s)
+    """
+    valores = (pedido["Pedido"], pedido["Comanda"], pedido["Lanche"], pedido["Quantidade"], pedido["Preco"])
+    cursor.execute(sql, valores)
+    conexao.commit()
+    print("Pedido salvo com sucesso!")
+  except Exception as e:
+    print(f"Erro ao salvar pedido: {e}")
+    conexao.rollback()
+
+def salvar_todos_pedidos(conexao, lista1):
+  """
+  Salva todos os pedidos na lista no banco de dados.
+  """
+  for pedido in lista1:
+    salvar_pedido(conexao, pedido)
+
+
 def cardapio():
     print("BEM-VINDO AO BOCA NERVOSA".center(55,"*"))
     print('+-------------+-----------------+---------------------+')
     print('|   CODIGO    |      PRODUTO    |        PRECO        |')
-    print('+-----A-------+-----------------+---------------------+')
+    print('+-------------+-----------------+---------------------+')
     for lanche in dic:#ler o dicionrio de cadastro e gera o cardapio co o itens atualizados
         cod = lanche["cod"]
         nome_lanche = lanche["lanche"]
@@ -26,7 +73,7 @@ def cardapio():
         print(f'|      {cod:<6}        {nome_lanche:<15} R$ {preco:>10.2f}    |')
     print('+-----------------------------------------------------+')
 
-def entrada_pedido(com):
+def entrada_pedido(com,conexao):
     soma2=0
     num=0
     print("NOVO PEDIDO".center(55,"-"))
@@ -47,7 +94,10 @@ def entrada_pedido(com):
         elif lanche1 =="P":
             print(f"VALOR PAGO R$ {soma2:.2f}".rjust(55))
             lista_produto.extend(lista1)#adiciona os novos itens na lista_produto
+            salvar_todos_pedidos(conexao, lista1)
             lista1.clear()
+            
+            
             break
         #encerra o laço e anula a comando
         elif lanche1=="S":
@@ -167,15 +217,16 @@ print('*'*55)
 cardapio()
 while True:
     print()
+    conexao=conectar_db
     print("MENU PRINCIPAL".center(55,"-"))
     print('1-Pedir      2-Consultar      3-Cardapio       4-Totais')
     print('S-Sair')
     menu=input('>> ').upper()
     if menu == '1':
         com+=1
-        entrada_pedido(com)
+        entrada_pedido(com,conexao)
     elif menu == '2':
-        consulta_pedido()
+        consulta_pedido(conexao)
     elif menu == '3':
         cardapio()
     elif menu == "4":
