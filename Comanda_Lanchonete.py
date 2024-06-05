@@ -35,9 +35,7 @@ def conectar_db():
     return None
   
 def salvar_pedido(conexao, pedido):
-  """
-  Salva um pedido no banco de dados.
-  """
+
   conexao=conexao
   cursor = conexao.cursor()
   try:
