@@ -1,160 +1,114 @@
 
 #                CONTROLE DE COMANDAS EM LANCHONETE
 import mysql.connector
-import json
+
 
 lista_produto=[]
 lista1=[]
-com=0
+numero_de_comanda=0
 dicionario={}
 # with open('comanda.txt', 'r') as adic:#abrir arquivo de nome "comanda.TXT" para leitura atribuido a "adic"
 #     dic = json.load(adic)#o dicionario "dic" = o aquivo JSON para leitura na variavel "adic"
+
 dic=[   {"cod":"1","lanche":"xburguer","preco":10.90},
         {"cod":"2","lanche":"xbacon  ","preco":9.90},
         {"cod":"3","lanche":"xsalada ","preco":9.90},
         {"cod":"4","lanche":"xtudo   ","preco":15.90},
         {"cod":"5","lanche":"refriger","preco":5.90}]
 
-#                         Inicio da funções
 
-def conectar_db():
-  """
-  Estabelece conexão com o banco de dados MySQL.
-  """
-  try:
-    conexao = mysql.connector.connect(
-      host="localhost",
-      user="usuario",
-      password="senha",
-      database="lanchonetenervosa"
-    )
-    print("Conectado ao MySQL com sucesso!")
-    return conexao
-  except Exception as e:
-    print(f"Erro ao conectar ao MySQL: {e}")
-    return None
-  
-def salvar_pedido(conexao, pedido):
-
-  conexao=conexao
-  cursor = conexao.cursor()
-  try:
-    sql = """
-      INSERT INTO pedidos (numero_pedido, item, lanche, quantidade, preco)
-      VALUES (%s, %s, %s, %s, %s)
-    """
-    valores = (pedido["Pedido"], pedido["Comanda"], pedido["Lanche"], pedido["Quantidade"], pedido["Preco"])
-    cursor.execute(sql, valores)
-    conexao.commit()
-    print("Pedido salvo com sucesso!")
-  except Exception as e:
-    print(f"Erro ao salvar pedido: {e}")
-    conexao.rollback()
-
-def salvar_todos_pedidos(conexao, lista1):
-  """
-  Salva todos os pedidos na lista no banco de dados.
-  """
-  for pedido in lista1:
-    salvar_pedido(conexao, pedido)
-
-
+#função para ver o cardapio
 def cardapio():
     print("BEM-VINDO AO BOCA NERVOSA".center(55,"*"))
     print('+-------------+-----------------+---------------------+')
     print('|   CODIGO    |      PRODUTO    |        PRECO        |')
     print('+-------------+-----------------+---------------------+')
     for lanche in dic:#ler o dicionrio de cadastro e gera o cardapio co o itens atualizados
-        cod = lanche["cod"]
-        nome_lanche = lanche["lanche"]
-        preco = lanche["preco"]
+        cod, nome_lanche, preco = lanche["cod"],lanche["lanche"],lanche["preco"]
         print(f'|      {cod:<6}        {nome_lanche:<15} R$ {preco:>10.2f}    |')
     print('+-----------------------------------------------------+')
 
-def entrada_pedido(com,conexao):
-    soma2=0
-    num=0
+# função entra de pedidos
+def entrada_pedido(numero_de_comanda):
+    valor_total_comanda, numero_item = 0, 0
     print("NOVO PEDIDO".center(55,"-"))
-    
-
     while True:
       try:
         print("S-SAIR                C-CANCELAR                P-PAGAR\n")
-        lanche1 = input('Digite o código do lanche que deseja>>').upper()
+        lanche_escolha = input('Digite o código do lanche que deseja>>').upper()
         #retorna o laço quando as opções sao invalidas
-        if lanche1[0] not in "12345SPC":
+        if lanche_escolha[0] not in "12345SPC":
             print('Escolha uma opção dentro do cardapio')
-        #cancela o item e retorna a soma2 atualizada
-        elif lanche1[0]=="C":
-            soma2=remover(soma2)
+        #cancela o item e retorna a valor_total_comanda atualizada
+        elif lanche_escolha[0]=="C":
+            valor_total_comanda=remover(valor_total_comanda)
             continue
-        #encerra o laço e rotorna o valor soma2 a ser pago
-        elif lanche1 =="P":
-            print(f"VALOR PAGO R$ {soma2:.2f}".rjust(55))
+        #encerra o laço e rotorna o valor valor_total_comanda a ser pago
+        elif lanche_escolha =="P":
+            print(f"VALOR PAGO R$ {valor_total_comanda:.2f}".rjust(55))
             lista_produto.extend(lista1)#adiciona os novos itens na lista_produto
-            salvar_todos_pedidos(conexao, lista1)
+            salvar_todos_pedidos( lista1)
             lista1.clear()
-            
-            
             break
         #encerra o laço e anula a comando
-        elif lanche1=="S":
+        elif lanche_escolha=="S":
             lista1.clear()# limpa a lista1
             break
         #recebe a quantidade e processa os dados no dicionario
         else:
-            num+=1
-            soma2 = coleta(lanche1,soma2,com,num)# envia e rotorna os parametros
+            numero_item+=1
+            valor_total_comanda = coleta(lanche_escolha,valor_total_comanda,numero_de_comanda,numero_item)# envia e rotorna os parametros
             continue
       except ValueError:
         print('Entre com um valor numerico ')
         continue
 
-def coleta(lanche1,soma2,com,num):
+# função para  coletar o item escolhido
+def coleta(lanche_escolha,valor_total_comanda,numero_de_comanda,numero_item):
     try:
         qtd = int(input('Digite a quantidade desejada incluir>>'))
-        for item in dic:#ler e atribui os valores ao dicionario
-            if item["cod"]==lanche1:
-                lanche=item["lanche"]
-                preco = item['preco']*qtd
-                soma2+=preco
-                dicionario = {'Pedido': com,
-                              'Comanda': num,
-                              'Lanche': lanche,
+        for item in dic:# ler e atribui os valores ao dicionario
+            if item["cod"]==lanche_escolha:
+                dicionario = {'Pedido': numero_de_comanda,
+                              'Comanda': numero_item,
+                              'Lanche': item["lanche"],
                               'Quantidade': qtd,
-                              'Preco': preco,}
+                              'Preco': item['preco']*qtd,
+                              'ValorTotal':valor_total_comanda+item['preco']*qtd }
                 lista1.append(dicionario.copy())
-                print(f"COMANDA N°{com}".rjust(55))
+                print(f"COMANDA N°{numero_de_comanda}".rjust(55))
                 print("Item          Lanche          Quantidade          Preco")
-                #ler e escre os valores na tela em forma de tabela
+                # ler e escre os valores na tela em forma de tabela
                 for lanche in lista1:
                     pre=lanche["Preco"]
                     print(f'N°{lanche["Comanda"]:<7}    {lanche["Lanche"]:<18}   {lanche["Quantidade"]:9<}            R${pre:>6.2f}')
                 print("SubTotal",end="")
-                print(f"R$ {soma2:.2f}".rjust(47))
-        return soma2#retorna o valor soma2
+                print(f"R$ {valor_total_comanda:.2f}".rjust(47))
+        return valor_total_comanda#retorna o valor valor_total_comanda
     except ValueError:
-        print('Entre com um valor numerico ')
+        print('Entre numero_de_comanda um valor numerico ')
 
-def remover(soma2):
+# função para remover um item da comanda
+def remover(valor_total_comanda):
   try:
-    num1=int(input('\nDigite o numero do item>>'))
+    numero_lanche_remover=int(input('\nDigite o numero do item>>'))
     for lanche in lista1:
-        if lanche["Comanda"] == num1:# exclui a partir do codigo do item
-            soma2-=lanche["Preco"]
+        if lanche["Comanda"] == numero_lanche_remover:# exclui a partir do codigo do item
+            valor_total_comanda-=lanche["Preco"]
             print(f'N°{lanche["Comanda"]:<7}    {lanche["Lanche"]:<18}  -{lanche["Quantidade"]:<9}   -R$ {lanche["Preco"]:>4.2f} ')
             lista1.remove(lanche)#exclua da lista de produtos
     print("REMOVIDO".rjust(55))
-    return soma2#retorna a soma2 atualizada
+    return valor_total_comanda#retorna a valor_total_comanda atualizada
   except ValueError:
     print("Não encontrada")
 
+#função para consultar a comanda
 def consulta_pedido():
     try:
         print("CONSULTAR COMANDA".center(55,"-"))
         print("0-Todas".rjust(55))
-        com1=int(input("\nDigite o numero da comanda>>"))
-        if com1 == 0:#consulta todas as comandas em lista_produto
+        pesquisar_numero_comanda=int(input("\nDigite o numero da comanda>>"))
+        if pesquisar_numero_comanda == 0:#consulta todas as comandas em lista_produto
             cont=len(lista_produto)
             if cont < 1:
                 print("Com     Item         Lanche       Quantidade      Preco")
@@ -170,11 +124,9 @@ def consulta_pedido():
                 
         else:#consulta o numero informado em inpute
           print("Com     Item         Lanche       Quantidade      Preco")
-          
-
 
           for lanche in lista_produto:
-              if lanche["Pedido"] == com1:
+              if lanche["Pedido"] == pesquisar_numero_comanda:
                   p=lanche["Preco"]
                   print(f'{lanche["Pedido"]}        {lanche["Comanda"]}          {lanche["Lanche"]}           {lanche["Quantidade"]}',end="")
                   print(f"R$ {p:.2f}".rjust(15))
@@ -184,6 +136,44 @@ def consulta_pedido():
     except ValueError:
       print("Nao encontrada")
 
+# função para conectar ao bd
+def conectar_db():
+  try:
+    conect = mysql.connector.connect(
+      host="localhost",
+      user="root",
+      password="root",
+      database="lanchonete"
+    )
+    print("Conectado com sucesso!")
+    return conect
+  except Exception as e:
+    print(f"Erro ao conectar ao MySQL: {e}")
+    return None
+
+# função para abri oa comanda
+def salvar_todos_pedidos( lista1):
+  for pedido in lista1:
+    salvar_pedido( pedido)
+
+# função para sanvar o pedido
+def salvar_pedido(pedido):
+  conectar=conectar_db()
+  cursor = conectar.cursor()
+  try:
+    sql = """
+      INSERT INTO pedido (id_pedido, id_lanche, nome_lanche, qtd_lanche, valor_lanche, valor_pedido)
+      VALUES (%s, %s, %s, %s, %s, %s)
+    """
+    valores = (pedido["Pedido"], pedido["Comanda"], pedido["Lanche"], pedido["Quantidade"], pedido["Preco"], pedido["ValorTotal"])
+    cursor.execute(sql, valores)
+    conectar.commit()
+    print("Pedido salvo numero_de_comanda sucesso!")
+  except Exception as e:
+    print(f"Erro ao salvar pedido: {e}")
+    conectar.rollback()
+
+# função para ver totais
 def total():
     print("VENDA TOTAL DO DIA".center(55))
     qtd_t=0
@@ -215,16 +205,16 @@ print('*'*55)
 cardapio()
 while True:
     print()
-    conexao=conectar_db
+    
     print("MENU PRINCIPAL".center(55,"-"))
     print('1-Pedir      2-Consultar      3-Cardapio       4-Totais')
     print('S-Sair')
     menu=input('>> ').upper()
     if menu == '1':
-        com+=1
-        entrada_pedido(com,conexao)
+        numero_de_comanda+=1
+        entrada_pedido(numero_de_comanda)
     elif menu == '2':
-        consulta_pedido(conexao)
+        consulta_pedido()
     elif menu == '3':
         cardapio()
     elif menu == "4":
