@@ -1,23 +1,24 @@
+# Função para salvar o pedido em uma nova comanda
 import modulo_conexao as conexao
 dicionario = {}
 
-# Função para salvar o pedido
-def salvar_pedido(lista1,valor_total_comanda):
-    conectar, cursor = conexao.conectar_db()
+def salvar_pedido(lista_desejo,valor_total_comanda):
+    
     try:
+        conectar, cursor = conexao.conectar_db()
         cursor.execute("INSERT INTO comandas (valor_total) VALUES (%s);", (valor_total_comanda,))
         conectar.commit()
         id_comanda = cursor.lastrowid  # Obtém o ID da comanda inserida
 
-        inserir_item(id_comanda, conectar, cursor, lista1)
+        inserir_item(id_comanda, conectar, cursor, lista_desejo)
         cursor.close()
         conectar.close()
     except ValueError:
         print("Erro ao inserir comanda: ")
 
-# Função para inserir item na comanda
-def inserir_item(id_comanda, conectar, cursor, lista1):
-    for pedido in lista1:
+# Função para inserir itens na comanda
+def inserir_item(id_comanda, conectar, cursor, lista_desejo):
+    for pedido in lista_desejo:
         
         lanche = pedido['Lanche']
         qtd = pedido['Quantidade']
@@ -29,7 +30,8 @@ def inserir_item(id_comanda, conectar, cursor, lista1):
                 VALUES ( %s, %s, %s, %s);
             """, (id_comanda, lanche, qtd, preco))
             conectar.commit()
-            print("Item inserido com sucesso!")
+            
+        
         except Exception as e:
             print(f"Erro ao inserir item: {e}")
             conectar.rollback()
