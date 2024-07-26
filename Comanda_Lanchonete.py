@@ -1,7 +1,7 @@
 import modulo_cardapio as cardapio
 import modulo_entrada_pedido as pedido
 import modulo_conexao as conexao
-#import modulo_consultar as consultar
+import modulo_totais as totais
 
 
 # Função para contar as comandas
@@ -84,16 +84,16 @@ try:
             if menu == '1':
                 comanda = id_comanda(cursor) + 1
                 print(f"Comanda número: {comanda}")
-                pedido.entrada_pedido(cursor, comanda)
+                pedido.entrada_pedido( comanda)
 
             elif menu == '2':
                 consulta_comanda()
 
             elif menu == '3':
-                print("Cardápio: ", dic)
+                cardapio.cardapio()
 
             elif menu == '4':
-                print("Totais: Implement this feature as needed")
+                totais.total(cursor)
 
             elif menu == 'S':
                 print("Deseja Encerrar o sistema?")
@@ -101,7 +101,11 @@ try:
                 per = input(">> ").upper()
                 if per == "SIM":
                     print("ENCERRANDO O SISTEMA".center(55))
-                    break
+                    if cursor:
+                        cursor.close()
+                    if conectar:
+                        conectar.close()
+                break
             else:
                 print('OPÇÃO INVÁLIDA!')
 

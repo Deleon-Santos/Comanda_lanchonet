@@ -4,7 +4,7 @@ import modulo_salvar as salva
 
 lista_produto=[]
 
-def entrada_pedido(cursor,comanda):
+def entrada_pedido(comanda):
     valor_total_comanda, numero_item = 0, 0
     print("NOVO PEDIDO".center(55,"-"))
     while True:
