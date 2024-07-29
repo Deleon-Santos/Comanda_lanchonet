@@ -26,13 +26,16 @@ Remove um item específico de um pedido e atualiza o valor total.
 Permite a consulta das comandas registradas.
 - Exibe todas as comandas ou uma específica.
 
+### `Pagar`
+- Salva a lista_desejo como uma comanda "Paga" no BD MySQL.
+
 ### `Totais`
-Calcula e exibe o total de vendas do dia, tanto em quantidade de itens quanto em valor monetário.
+- Calcula e exibe o total de vendas por item,comanda, totais, quantidade de itens e valor monetário.
 
 ## Estrutura do Código
 
 ### fluxograma
-![fluxograma](img/Captura de tela 2024-07-29 170655.png)
+![fluxograma](img/captura.png)
 ### Produtos Pré-carregados
 ```python
 dic = [
@@ -53,6 +56,6 @@ Este software fornece uma solução completa para o gerenciamento de comandas em
 
 ## Desenvolvedor
 Deleon Santos
-- Este sitema foi desenvolvido em carater academico e sua concepção inspirou possibilitou a criação do ![App Vendas](https://github.com/Deleon-Santos/APP-vendas-V2.1.1)
+- Este sitema foi desenvolvido em carater academico e sua concepção inspirou possibilitou a criação do ![App Vendas](/img/img2.png)
 
 
