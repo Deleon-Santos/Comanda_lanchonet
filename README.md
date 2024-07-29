@@ -22,7 +22,7 @@ Coleta a quantidade de um item específico e atualiza o valor total do pedido.
 ### `Remover`
 Remove um item específico de um pedido e atualiza o valor total.
 
-### `Consulta pedido`
+### `Consultar`
 Permite a consulta das comandas registradas.
 - Exibe todas as comandas ou uma específica.
 
@@ -33,7 +33,24 @@ Permite a consulta das comandas registradas.
 - Calcula e exibe o total de vendas por item,comanda, totais, quantidade de itens e valor monetário.
 
 ## Estrutura do Código
-
+```plaintext
+├── comanda_lanchonete
+    ├── Modulo_candapio
+        └── dicionario
+    ├── modulo_conexao
+    ├── modulo_entrada_pedidos
+        ├── modulo_comanda
+        ├── modulo_coleta
+            └── dicionario
+        ├── modulo_pagar
+            ├── modulo_salvar
+                └── BD MySQL
+    ├── modulo_consultar
+        └── BD MySQL
+    ├── modulo_totais
+        └── BD MySQL
+    └── Sair
+```
 ### fluxograma
 ![fluxograma](img/captura.png)
 ### Produtos Pré-carregados
@@ -52,7 +69,7 @@ dic = [
 - `n_comanda`: Contador de comandas.
 - `dicionario`: Dicionário temporário para armazenar os dados de um item do pedido.
 ## Conclusão
-Este software fornece uma solução completa para o gerenciamento de comandas em uma lanchonete, permitindo uma operação eficiente e organizada das vendas e pedidos.
+Este software fornece uma solução completa para o gerenciamento de comandas em uma lanchonete, permitindo uma operação eficiente e organizada das vendas e pedidos com a utilização do banco de dados MySQL.
 
 ## Desenvolvedor
 Deleon Santos
