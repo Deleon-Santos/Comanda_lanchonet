@@ -1,5 +1,5 @@
 # Controle de Comandas em Lanchonete
-![Comanda](comanda_img.png)
+![Comanda](img/comanda_img.png)
 
 ## Descrição
 Este software gerencia o controle de comandas em uma lanchonete. Ele permite aos usuários fazer pedidos, consultar comandas, ver o cardápio e calcular o total de vendas do dia. As funcionalidades são implementadas em Python, utilizando listas e dicionários para armazenar os dados dos produtos e das comandas.
@@ -31,12 +31,8 @@ Calcula e exibe o total de vendas do dia, tanto em quantidade de itens quanto em
 
 ## Estrutura do Código
 
-### Variáveis Globais
-- `lista_produto`: Lista que armazena todos os produtos pedidos durante o dia.
-- `lista1`: Lista temporária para armazenar os itens do pedido atual.
-- `com`: Contador de comandas.
-- `dicionario`: Dicionário temporário para armazenar os dados de um item do pedido.
-
+### fluxograma
+![fluxograma](img/Captura de tela 2024-07-29 170655.png)
 ### Produtos Pré-carregados
 ```python
 dic = [
@@ -47,6 +43,11 @@ dic = [
     {"cod": "5", "lanche": "refriger", "preco": 5.90}
 ]
 ```
+### Variáveis Globais
+- `lista_produto`: Lista que armazena todos os produtos pedidos durante o dia.
+- `lista_desejo`: Lista temporária para armazenar os itens do pedido atual.
+- `n_comanda`: Contador de comandas.
+- `dicionario`: Dicionário temporário para armazenar os dados de um item do pedido.
 ## Conclusão
 Este software fornece uma solução completa para o gerenciamento de comandas em uma lanchonete, permitindo uma operação eficiente e organizada das vendas e pedidos.
 
