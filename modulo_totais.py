@@ -21,9 +21,9 @@ def total():
             if menu == 1:
                
                 cursor.execute("""
-                    SELECT nome_lanche, SUM(qtd_lanche) as total_vendas, SUM(preco_lanche * qtd_lanche) as total_preco 
-                    FROM itens_comanda 
-                    GROUP BY nome_lanche;
+                    select nome_lanche, sum(qtd_lanche) as total_vendas, sum(preco_lanche * qtd_lanche) as total_preco 
+                    from itens_comanda 
+                    group by nome_lanche;
                 """)
                 
                 resultados = cursor.fetchall()
@@ -42,7 +42,6 @@ def total():
             elif menu == 2:
                 escolha_menu = input("Selecione o código do item: ")
                 
-
                 # Verificar se o código está na lista de lanches
                 lanche_encontrado = None
                 for item in dic:
@@ -52,9 +51,9 @@ def total():
 
                 if lanche_encontrado:
                     cursor.execute("""
-                        SELECT id_comanda, nome_lanche, qtd_lanche, preco_lanche
-                        FROM itens_comanda
-                        WHERE nome_lanche = %s
+                        select id_comanda, nome_lanche, qtd_lanche, preco_lanche
+                        from itens_comanda
+                        where nome_lanche = %s
                     """, (lanche_encontrado,))# encontrar a descricao do lanche no dicionario
 
                     resultados = cursor.fetchall()

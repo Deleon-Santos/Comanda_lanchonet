@@ -6,7 +6,7 @@ def salvar_pedido(lista_desejo,valor_total_comanda):
     
     try:
         conectar, cursor = conexao.conectar_db()
-        cursor.execute("INSERT INTO comandas (valor_total) VALUES (%s);", (valor_total_comanda,))
+        cursor.execute("insert into comandas (valor_total) values (%s);", (valor_total_comanda,))
         conectar.commit()
         id_comanda = cursor.lastrowid  # Obtém o ID da comanda inserida
 
@@ -26,8 +26,8 @@ def inserir_item(id_comanda, conectar, cursor, lista_desejo):
 
         try:
             cursor.execute("""
-                INSERT INTO itens_comanda (id_comanda, nome_lanche, qtd_lanche, preco_lanche)
-                VALUES ( %s, %s, %s, %s);
+                insert into itens_comanda (id_comanda, nome_lanche, qtd_lanche, preco_lanche)
+                values ( %s, %s, %s, %s);
             """, (id_comanda, lanche, qtd, preco))
             conectar.commit()
             

@@ -1,3 +1,5 @@
+
+
 import modulo_cardapio as cardapio
 import modulo_entrada_pedido as pedido
 import modulo_conexao as conexao
@@ -7,11 +9,10 @@ import modulo_consultar as consultar
 
 
 # ************************** Início do programa principal *************************
-dic = cardapio.cardapio()
+dic = cardapio.cardapio() #Apresentação do cardapio
 
 try:
-    conectar, cursor = conexao.conectar_db()
-    print('Conexão ok')
+    conectar, cursor = conexao.conectar_db() # tentativa de conexão com bd 
 
     while True:
         try:
@@ -55,8 +56,4 @@ try:
 except Exception as e:
     print(f'Erro ao conectar com o banco de dados: {e}')
 
-finally:
-    if cursor:
-        cursor.close()
-    if conectar:
-        conectar.close()
+
