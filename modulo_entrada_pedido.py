@@ -45,6 +45,6 @@ def entrada_pedido(comanda):
         except ValueError:
             print('Entre com um valor numerico ')
             continue
-        except Exception as e:
+        except :
             print("Item não localizadoss")
             continue
